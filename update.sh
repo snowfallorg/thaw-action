@@ -20,7 +20,7 @@ fi
 
 if [[ -z "$(git status --porcelain flake.nix flake.lock)" ]]; then
 	echo "No changes to commit"
-	exit 1
+else
+	nix "${nix_options[@]}" flake lock
 fi
 
-nix "${nix_options[@]}" flake lock
