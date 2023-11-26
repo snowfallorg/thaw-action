@@ -1,0 +1,52 @@
+name: Snowfall Thaw
+description: Upgrade Nix flake inputs based on SemVer
+inputs:
+  inputs:
+    description: 'A space delimited list of specific inputs to upgrade.'
+    required: false
+    default: ''
+  token:
+    description: 'A GitHub token with repo access (defaults to GITHUB_TOKEN).'
+    required: false
+    default: ${{ github.token }}
+  flake-path:
+    description: 'The path to the directory containing the flake.nix file.'
+    required: false
+    default: ''
+  thaw-uri:
+    description: 'The URI to pull Thaw from.'
+    required: false
+    default: 'github:snowfallorg/thaw'
+  nix-options:
+    description: 'Additional options to pass to Nix.'
+    required: false
+    default: ''
+runs:
+  using: composite
+  steps:
+    - name: Set Git environment variables
+      shell: bash
+      run: |
+        echo "GIT_AUTHOR_NAME=github-actions[bot]" >> $GITHUB_ENV
+        echo "GIT_AUTHOR_EMAIL=41898282+github-actions[bot]@users.noreply.github.com" >> $GITHUB_ENV
+        echo "GIT_COMITTER_NAME=github-actions[bot]" >> $GITHUB_ENV
+        echo "GIT_COMITTER_EMAIL=41898282+github-actions[bot]@users.noreply.github.com" >> $GITHUB_ENV
+    - name: Run Thaw
+      run: $GITHUB_ACTION/thaw-action.sh
+      shell: bash
+      env:
+        GIT_AUTHOR_NAME: ${{ env.GIT_AUTHOR_NAME }}
+        GIT_AUTHOR_EMAIL: ${{ env.GIT_AUTHOR_EMAIL }}
+        GIT_COMMITTER_NAME: ${{ env.GIT_COMMITTER_NAME }}
+        GIT_COMMITTER_EMAIL: ${{ env.GIT_COMMITTER_EMAIL }}
+        TARGET_INPUTS: ${{ inputs.inputs }}
+        FLAKE_PATH: ${{ inputs.flake-path }}
+        THAW_URI: ${{ inputs.thaw-uri }}
+        NIX_OPTIONS: ${{ inputs.nix-options }}
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v5
+      with:
+        commit-message: 'chore(thaw): upgrade flake inputs'
+        title: 'chore(thaw): upgrade flake inputs'
+        body: |
+          Flake inputs were automatically upgraded by the [Thaw](https://github.com/snowfallorg/thaw-action) GitHub Action.
