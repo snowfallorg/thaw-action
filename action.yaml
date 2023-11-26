@@ -36,7 +36,7 @@ runs:
         echo "GIT_COMITTER_NAME=github-actions[bot]" >> $GITHUB_ENV
         echo "GIT_COMITTER_EMAIL=41898282+github-actions[bot]@users.noreply.github.com" >> $GITHUB_ENV
     - name: Run Thaw
-      run: $GITHUB_ACTION/thaw-action.sh
+      run: $GITHUB_ACTION_PATH/update.sh
       shell: bash
       env:
         GIT_AUTHOR_NAME: ${{ env.GIT_AUTHOR_NAME }}
