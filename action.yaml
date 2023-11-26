@@ -21,6 +21,10 @@ inputs:
     description: 'Additional options to pass to Nix.'
     required: false
     default: ''
+  branch:
+    description: 'The branch to push changes to.'
+    required: false
+    default: 'gh-thaw-action'
 runs:
   using: composite
   steps:
@@ -46,6 +50,9 @@ runs:
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v5
       with:
+        token: ${{ inputs.token }}
+        branch: ${{ inputs.branch }}
+        delete-branch: true
         commit-message: 'chore(thaw): upgrade flake inputs'
         title: 'chore(thaw): upgrade flake inputs'
         body: |
