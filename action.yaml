@@ -16,7 +16,7 @@ inputs:
   thaw-uri:
     description: 'The URI to pull Thaw from.'
     required: false
-    default: 'github:snowfallorg/thaw'
+    default: 'github:snowfallorg/thaw?ref=v1.0.3'
   nix-options:
     description: 'Additional options to pass to Nix.'
     required: false
